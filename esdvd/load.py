@@ -13,18 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
 from esdvd import ESCommon
-from elasticsearch import Elasticsearch
+import json
 
 
 class LoadData(ESCommon):
 
     def __init__(self):
         ESCommon.__init__(self)
+        self.files = None
+
+    def process_one_file(self, path):
+        data = self.get_file_contents(path)
+        doc = json.loads(data)
+        self.send_data(doc)
+
+    def send_data(self, doc):
+        res = self.es.index(index=self.index, doc_type=self.doc_type, id=doc[self.id_field_name], body=doc)
+        print(res)
+        #print(res['_source'])
 
     def execute(self):
         self.handle_arguments()
-        print('execute')
+        self.set_extraction_directory()
+        self.process_files()
 
     def get_description(self):
         return "Loads DVD records in the form of JSON files into a Elasticsearch database"

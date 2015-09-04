@@ -54,6 +54,10 @@ class ExtractData(Common):
         """
         Load the zip file with our DVD and process 
         """
+
+        # Call our method to make sure we have a path to an output directory
+        # and mask sure it exists, creating if if necessary
+        self.ensure_extraction_directory()
         with gzip.open(file_name, 'rb') as f:
             reader = csv.DictReader(f)
             for row in reader:
