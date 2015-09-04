@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright 2015 David Gwartney
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "0.1.0"
+from esdvd import ESCommon
+from elasticsearch import Elasticsearch
 
-from .common import Common
-from .common import ESCommon
+
+class LoadData(ESCommon):
+
+    def __init__(self):
+        ESCommon.__init__(self)
+
+    def execute(self):
+        self.handle_arguments()
+        print('execute')
+
+    def get_description(self):
+        return "Loads DVD records in the form of JSON files into a Elasticsearch database"
+
+
+def main():
+    l = LoadData()
+    l.execute()
+
+if __name__ == '__main__':
+    main()

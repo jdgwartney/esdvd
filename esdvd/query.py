@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright 2015 David Gwartney
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "0.1.0"
+from esdvd import ESCommon
 
-from .common import Common
-from .common import ESCommon
+
+class QueryData(ESCommon):
+
+    def __init__(self):
+        pass
+
+    def execute(self):
+        pass
+
+
+def main():
+    l = QueryData()
+    l.execute()
+
+if __name__ == '__main__':
+    main()

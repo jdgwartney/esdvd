@@ -43,7 +43,11 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'esdvd-delete = esdvd.delete:main',
             'esdvd-extract = esdvd.extract:main',
+            'esdvd-load = esdvd.load:main',
+            'esdvd-query = esdvd.query:main',
+            'esdvd-update = esdvd.update:main',
         ]
     },
     classifiers=[

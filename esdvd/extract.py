@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+# Copyright 2015 David Gwartney
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import print_function
 import csv
 import argparse
@@ -13,56 +27,27 @@ from esdvd import Common
 class ExtractData(Common):
 
     def __init__(self):
-        self.args = None
+        Common.__init__(self)
+
         self.data_directory = None
-        self.extraction_directory = None
-        self.default_extraction_directory_name= 'data_store'
-        self.parser = None
         data_dir = os.path.dirname(esdvd.__file__)
         self.data_file_name = 'dvd_csv.txt.gz'
         self.data_path = os.path.join(data_dir, self.data_file_name)
-        self.parser = argparse.ArgumentParser(description='Extracts and converts DVD records to JSON files',
-                                              version=esdvd.__version__)
+
+    def get_description(self):
+        return 'Extracts and converts DVD records to JSON files'
 
     def add_command_line_arguments(self):
-        self.parser.add_argument('-e','--extract-dir', action='store', dest='extract_dir', type=str,
-                                 metavar='path', required=False,
-                                 help='Path to store the extracted DVD records in JSON files')
+        Common.add_command_line_arguments(self)
 
     def get_command_line_arguments(self):
-        """
-        Fetch the data from the command line parser
-        """
-        if self.args.extract_dir is not None:
-            self.extraction_directory = self.args.extract_dir
-
-    def handle_arguments(self):
-        """
-        Handles the parsing of the command line arguments passed to the program
-        """
-        self.add_command_line_arguments()
-        self.args = self.parser.parse_args()
-        self.get_command_line_arguments()
-
-    def initialize(self):
-        """
-        Perform any initial configuration
-        """
-
-        # if the extraction directory was not specified then
-        #
-        if self.extraction_directory is None:
-            self.extraction_directory = os.path.join(os.getcwdu(), self.default_extraction_directory_name)
-
-        if not os.path.exists(self.extraction_directory):
-            os.mkdir(self.extraction_directory)
+        Common.get_command_line_arguments(self)
 
     def execute(self):
         """
         Execute the program
         """
         self.handle_arguments()
-        self.initialize()
         self.load(self.data_path)
 
     def load(self, file_name):
