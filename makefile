@@ -14,5 +14,5 @@ rebuild: clean install
 #        python setup.py sdist upload
         
 clean:
-	/bin/rm -rf dist 
+	/bin/rm -rf dist *.egg-info
 	pip freeze | grep $(TARGET) && pip uninstall -y $(TARGET)
