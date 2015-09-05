@@ -35,7 +35,9 @@ setup(
     url='https://github.com/jdgwartney/esdvd',
     description='Tools to load a DVD Database into Elasticsearch',
     long_description=ld,
-    install_requires=['elasticsearch >= 1.6.0', ],
+    install_requires=['elasticsearch >= 1.6.0',
+                      'py-lru-cache >= 0.1.4',
+                     ],
     packages=['esdvd'],
     package_data={
         '': ['README.md'],
