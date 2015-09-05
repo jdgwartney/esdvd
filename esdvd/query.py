@@ -64,7 +64,8 @@ class QueryData(ESCommon):
         :return:
         """
         res = self.es.get(index=self.index, doc_type=self.doc_type, id=record_id)
-        print(res['_source'])
+        if not self.quiet:
+            print(res['_source'])
 
     def increment_count(self):
         self.count += 1
@@ -79,13 +80,16 @@ class QueryData(ESCommon):
 
     def query_database(self):
         self.files = self.get_files()
-        print("number of files: {0}".format(len(self.files)))
+        if not self.quiet:
+            print("number of files: {0}".format(len(self.files)))
         while not self.done():
             rindex = random.randrange(0, len(self.files) - 1)
             record_id = QueryData.get_id(self, rindex)
-            print("+++++")
+            if not self.quiet:
+                print("+++++")
             self.query_record(record_id)
-            print("-----")
+            if not self.quiet:
+                print("-----")
             time.sleep(self.sleep)
             self.increment_count()
 

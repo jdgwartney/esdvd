@@ -23,6 +23,7 @@ import sys
 class Common:
 
     def __init__(self):
+        self.quiet = False
         self.extraction_directory = None
         self.default_extraction_directory_name = 'data_store'
         self.args = None
@@ -42,6 +43,8 @@ class Common:
         self.parser.add_argument('-e', '--extract-dir', action='store', dest='extract_dir', type=str,
                                  metavar='path', required=self.extract_directory_required(),
                                  help='Path to store the extracted DVD records in JSON files')
+        self.parser.add_argument('-q', '--quit', action='store_true', dest='quiet', help='Silent mode')
+
 
     def get_command_line_arguments(self):
         """
@@ -49,6 +52,9 @@ class Common:
         """
         if self.args.extract_dir is not None:
             self.extraction_directory = self.args.extract_dir
+
+        if self.args.quiet is not None:
+            self.quiet = self.args.quiet
 
     def handle_arguments(self):
         """
@@ -95,6 +101,12 @@ class ESCommon(Common):
         Add command line arguments to the parser
         """
         Common.add_command_line_arguments(self)
+        self.parser.add_argument('-d', '--doc-type', action='store', dest='doc_type', type=str,
+                                 metavar='doc_type_name', required=False,
+                                 help='Index name')
+        self.parser.add_argument('-i', '--index', action='store', dest='index', type=str,
+                                 metavar='index_name', required=False,
+                                 help='Index name')
         self.parser.add_argument('-l', '--limit', action='store', dest='limit', type=int,
                                  metavar='value', required=False,
                                  help='Limit on the number of records')
@@ -110,6 +122,12 @@ class ESCommon(Common):
 
         if self.args.extract_dir is not None:
             self.extraction_directory = self.args.extract_dir
+
+        if self.args.index is not None:
+            self.index = self.args.index
+
+        if self.args.doc_type is not None:
+            self.doc_type = self.args.doc_type
 
         if self.args.limit is not None:
             self.limit = self.args.limit

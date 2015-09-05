@@ -31,8 +31,8 @@ class LoadData(ESCommon):
 
     def send_data(self, doc):
         res = self.es.index(index=self.index, doc_type=self.doc_type, id=doc[self.id_field_name], body=doc)
-        print(res)
-        #print(res['_source'])
+        if not self.quiet:
+            print(res)
 
     def execute(self):
         self.handle_arguments()
