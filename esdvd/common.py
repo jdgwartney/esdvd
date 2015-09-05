@@ -87,13 +87,15 @@ class Common:
 class ESCommon(Common):
     def __init__(self):
         Common.__init__(self)
-        self.es = Elasticsearch()
+        self.es = None
         self.index = 'dvd-database'
         self.doc_type = 'dvd-record'
         self.id_field_name = 'ID'
         self.files = None
         self.count = 0
         self.limit = None
+        self.host = 'localhost'
+        self.port = 9200
         self.sleep = 5
 
     def add_command_line_arguments(self):
@@ -101,6 +103,9 @@ class ESCommon(Common):
         Add command line arguments to the parser
         """
         Common.add_command_line_arguments(self)
+        self.parser.add_argument('-a', '--host', action='store', dest='host', type=str,
+                                 metavar='host_name', required=False,
+                                 help='Host to contact the elasticsearch instance')
         self.parser.add_argument('-d', '--doc-type', action='store', dest='doc_type', type=str,
                                  metavar='doc_type_name', required=False,
                                  help='Index name')
@@ -110,6 +115,9 @@ class ESCommon(Common):
         self.parser.add_argument('-l', '--limit', action='store', dest='limit', type=int,
                                  metavar='value', required=False,
                                  help='Limit on the number of records')
+        self.parser.add_argument('-p', '--port', action='store', dest='port', type=int,
+                                 metavar='port', required=False,
+                                 help='Listening port for elasticsearch')
         self.parser.add_argument('-s', '--sleep', action='store', dest='sleep', type=int,
                                  metavar='value', required=False,
                                  help='Sleep value')
@@ -129,11 +137,19 @@ class ESCommon(Common):
         if self.args.doc_type is not None:
             self.doc_type = self.args.doc_type
 
+        if self.args.host is not None:
+            self.host = self.args.host
+
+        if self.args.port is not None:
+            self.port = self.args.port
+
         if self.args.limit is not None:
             self.limit = self.args.limit
 
         if self.args.sleep is not None:
             self.sleep = self.args.sleep
+
+        self.es = Elasticsearch([{'host': self.host, 'port': self.port}] )
 
     def get_file_contents(self, path):
         with open(path, 'rb') as f:
